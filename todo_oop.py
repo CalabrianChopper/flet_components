@@ -8,13 +8,19 @@ class Task(ft.UserControl):
         self.task_delete = task_delete
         
     def editClick(self, e):
-        pass
+        self.displayView.visible = False
+        self.editView.visible = True
+        self.editName.value = self.displayTask.label
+        self.update()
 
     def saveClick(self, e):
-        pass
+        self.displayView.visible = True
+        self.editView.visible = False
+        self.displayTask.label = self.editName.value
+        self.update()
     
     def deleteClick(self, e):
-        pass
+        self.task_delete(self)
         
     def build(self):
         self.displayTask = ft.Checkbox(label=self.task_name, 
@@ -23,14 +29,14 @@ class Task(ft.UserControl):
         
         self.displayView = ft.Row(controls=[self.displayTask,
                                             ft.Row(controls=[ft.IconButton(ft.icons.CREATE_OUTLINED,
-                                                                           on_click=editClick),
+                                                                           on_click=self.editClick),
                                                              ft.IconButton(ft.icons.DELETE_OUTLINED,
-                                                                           on_click=deleteClick)])])
+                                                                           on_click=self.deleteClick)])])
         
         self.editView = ft.Row(visible= False,
                                controls=[self.editName,
-                                         ft.IconButton(ft.icons.DELETE_OUTLINED,
-                                                        on_click=saveClick)])
+                                         ft.IconButton(ft.icons.DONE_OUTLINED,
+                                                        on_click=self.saveClick)])
         
         return ft.Column(controls=[self.displayView,
                                    self.editView])
@@ -48,10 +54,14 @@ class TaskApp(ft.UserControl):
         return taskRow
     
     def addClick(self, e):
-        task = Task(self.text_field.value)
+        task = Task(self.text_field.value, self.taskDelete)
+        self.tasks.controls.append(task)
+        self.text_field.value = ""
+        self.update()
     
     def taskDelete(self, task):
-        pass
+        self.tasks.controls.remove(task)
+        self.update()
     
 
 
