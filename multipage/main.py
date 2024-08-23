@@ -1,15 +1,22 @@
 import flet as ft
 from flet_route import Routing, path
-from views.home import Home
-from views.page1 import Page1
-from views.page2 import Page2
+from multipage.views.home import Home
+from multipage.views.page1 import Page1
+from multipage.views.page2 import Page2
 
 def main(page: ft.Page):
     
-    elm1 = ft.Text("Ciao", color = "green")
-    elm2 = ft.Text("Mi chiamo fracesco", color = "blue")
+    app_routes = [
+        
+        path(url="/", view=Home),
+        path(url = "/page1/:my_id", view = Page1),
+        path(url = "/page2/:name", view = Page2),
+        
+    ]
     
-    page.controls.append(elm1)
-    page.add(elm2)
+    Routing(page=page, 
+            app_route=app_routes)
+    
+    page.go(page.route)
 
 ft.app(target= main)
